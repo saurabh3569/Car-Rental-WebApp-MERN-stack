@@ -9,7 +9,6 @@ const userRoutes = require('./routes/userRoutes')
 const carRoutes = require('./routes/carRoutes')
 const bookinRoutes = require('./routes/bookingRoutes')
 
-
 const app = express()
 app.use(express.json());
 
@@ -19,20 +18,12 @@ app.use('/api/cars', carRoutes)
 app.use('/api/booking', bookinRoutes)
 
 // static files
-if (process.env.NODE_ENV === "production") {
-    // serve static files
-    app.use(express.static(path.join(__dirname, "../client/build")));
-  
-    // serve index.html file
-    app.get("*", function(req, res) {
-      res.sendFile(path.join(__dirname, "../client/build", "index.html"), function(err) {
-        if (err) {
-          res.status(500).send(err);
-        }
-      });
-    });
-  }
+app.use(express.static(path.join(__dirname,'./client/build')))
 
+app.get("*",function(req,res){
+    res.sendFile(path.join(__dirname,'./client/build/index.html'))
+})
+ 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, async () => {
