@@ -19,11 +19,19 @@ app.use('/api/cars', carRoutes)
 app.use('/api/booking', bookinRoutes)
 
 // static files
-app.use(express.static(path.join(__dirname,'../client/build')))
-
-app.get("*",function(req,res){
-    res.sendFile(path.join(__dirname,'../client/build','index.html'))
-})
+if (process.env.NODE_ENV === "production") {
+    // serve static files
+    app.use(express.static(path.join(__dirname, "../client/build")));
+  
+    // serve index.html file
+    app.get("*", function(req, res) {
+      res.sendFile(path.join(__dirname, "../client/build", "index.html"), function(err) {
+        if (err) {
+          res.status(500).send(err);
+        }
+      });
+    });
+  }
 
 const PORT = process.env.PORT || 5000;
 
